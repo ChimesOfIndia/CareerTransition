@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Career Transition Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.4/d3.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .dashboard { display: grid; grid-template-columns: 1fr 3fr; gap: 20px; }
+        .filter-section { padding: 10px; background: #f4f4f4; }
+        .grid-container { display: flex; flex-wrap: wrap; gap: 15px; }
+        .card { border: 1px solid #ddd; padding: 10px; width: 250px; background: white; cursor: pointer; }
+        .hidden { display: none; }
+        .bar-chart-container { width: 100%; max-width: 600px; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h1>AI Career Transition Dashboard</h1>
+    <div class="dashboard">
+        <div class="filter-section">
+            <h3>Filter Roles</h3>
+            <input type="text" id="search" placeholder="Search roles..." onkeyup="filterRoles()">
+        </div>
+        <div class="grid-container" id="role-grid"></div>
+    </div>
+
+    <div class="bar-chart-container">
+        <canvas id="impactChart"></canvas>
+    </div>
+
+    <script>
+        const roles = [
+            { current: "QA Engineer", impact: 63, future: "Autonomous Testing Specialist" },
+            { current: "Frontend Developer", impact: 57, future: "Autonomous Frontend Engineer" },
+            { current: "Data Engineer", impact: 54, future: "AI Data Operations Architect" },
+            { current: "Data Scientist", impact: 52, future: "AI-Driven Insight Engineer" }
+        ];
+
+        function renderGrid() {
+            const grid = document.getElementById('role-grid');
+            grid.innerHTML = '';
+            roles.forEach(role => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `<strong>${role.current}</strong><br>Impact: ${role.impact}%<br>Future: ${role.future}`;
+                grid.appendChild(card);
+            });
+        }
+
+        function filterRoles() {
+            const searchTerm = document.getElementById('search').value.toLowerCase();
+            document.querySelectorAll('.card').forEach(card => {
+                card.style.display = card.innerText.toLowerCase().includes(searchTerm) ? 'block' : 'none';
+            });
+        }
+
+        function renderChart() {
+            const ctx = document.getElementById('impactChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: roles.map(r => r.current),
+                    datasets: [{
+                        label: 'AI Impact %',
+                        data: roles.map(r => r.impact),
+                        backgroundColor: 'rgba(54, 162, 235, 0.6)'
+                    }]
+                }
+            });
+        }
+
+        renderGrid();
+        renderChart();
+    </script>
+</body>
+</html>
